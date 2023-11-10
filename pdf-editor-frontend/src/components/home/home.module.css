@@ -1,0 +1,16 @@
+.download{
+  padding: 20px 40px;
+  font-size: 2rem;
+  background-color: var(--primary-pink);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.wrapper{
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}

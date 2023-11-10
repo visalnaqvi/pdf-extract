@@ -1,0 +1,51 @@
+.wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    box-shadow: 10px 0 20px 20px #00000010;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    padding: 10px 20px;
+    background-color: var(--primary-pink);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.button:hover{
+    background-color: var(--hover);
+}
+
+.logo{
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width:424px){
+    .wrapper{
+        flex-direction: column;
+    }
+
+    .flex{
+        flex-direction: column;
+    }
+
+    .button{
+        margin: 10px 0;
+    }
+}
