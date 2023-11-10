@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
-app.get("/ping",(req,res)=>res.send("Hi"));
+app.get("/",(req,res)=>res.send("Hi"));
 
 app.use("/files",express.static("files"))
 

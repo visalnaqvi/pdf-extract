@@ -21,14 +21,11 @@ const Pages = ({ count , handleExtraction , pdfFile }) => {
   }
 
 
-  useEffect(()=>{
-    console.log("pagecomponent",pdfFile)
-  },[pdfFile])
+
 
 
   const handleSubmit = ()=>{
     let pagesToRemove = pageNumbers.filter(p => !selectedPages.includes(p.toString()))
-    console.log("inside",pagesToRemove)
     handleExtraction(pagesToRemove)
     setSeletedPages([])
 
@@ -45,9 +42,7 @@ const Pages = ({ count , handleExtraction , pdfFile }) => {
    {pdfFile &&   <div className={styles.cardHolder}>
         {pageNumbers.map((pageNumber) => (
           <div className={styles.card} key={pageNumber}>
-            {/* <div className={styles.icon}>
-              <FcDocument />
-            </div> */}
+          
             <label htmlFor={`${pageNumber}check`}><PDFGrid pdfFile={pdfFile} page={pageNumber} /></label>
             <input
               name="pageNumber"

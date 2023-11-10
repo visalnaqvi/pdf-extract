@@ -33,7 +33,7 @@ const Home = ({showFileInput , pdfFileProp}) => {
 
         async function checkBackendOnline(){
             try{
-                let response = await axios.get(server+"ping");
+                let response = await axios.get(server);
             if(response.status===200){
                 setLoading(false);
             }
@@ -52,7 +52,7 @@ const Home = ({showFileInput , pdfFileProp}) => {
         formData.append('pdfFile', pdfFile);
         formData.append('pagesToRemove', pagesToRemove);
         try {
-            const response = await axios.post('http://localhost:3500/upload/extract', formData, {
+            const response = await axios.post(server+'upload/extract', formData, {
                 responseType: 'blob', // Specify response type as blob
             });
             if (response.status === 200) {
@@ -76,7 +76,7 @@ const Home = ({showFileInput , pdfFileProp}) => {
         const formData = new FormData();
         formData.append('pdfFile', pdfFile);            
         try {
-            const response = await axios.post('http://localhost:3500/upload/parse', formData);
+            const response = await axios.post(server+'upload/parse', formData);
             if (response.status === 200) {
                 setTotalPages(response.data)
                 setResponse(false)
@@ -84,14 +84,12 @@ const Home = ({showFileInput , pdfFileProp}) => {
                 setTotalPages(0)
                 alert('Error uploading and modifying PDF.');
             }
-            console.log("userrrrr",user)
             if(user.userId){
                 formData.append("userId",user.userId)
                 try{
-                    const responseSave = await axios.post('http://localhost:3500/upload/save', formData);
-                    console.log("response save",responseSave)
+                    const responseSave = await axios.post(server+'upload/save', formData);
                     if (responseSave.status === 200) {
-                       console.log("uff success")
+                       console.log("success")
                     } else {
                         alert('Error uploading and modifying PDF.');
                     }
@@ -111,7 +109,7 @@ const Home = ({showFileInput , pdfFileProp}) => {
  
     return (
         <div>
-            {loading && <h1>Waiting for backend to come online. It might take few seconds as hosted on free service. If you are running on local then consider changing default export in /config.js to localHost.</h1>}
+            {loading ? <h1>Waiting for backend to come online.</h1> :<div>
            {showFileInput && <FileInput handleFileChange={handleFileChange} handleSubmit={handleUpload} />}
             {response ? (
                 <div className={styles.wrapper}>
@@ -128,6 +126,8 @@ const Home = ({showFileInput , pdfFileProp}) => {
             ) : (
                 <div>{totalPages > 0 && <Pages pdfFile={pdfFile} count={totalPages} handleExtraction={handleExtraction} />}</div>
             )}
+            </div>
+        }
         </div>)
 }
 

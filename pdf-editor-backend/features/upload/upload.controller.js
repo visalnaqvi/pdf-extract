@@ -3,7 +3,6 @@ import { PDFDocument } from 'pdf-lib';
 export default class UploadController {
 
     async saveFile(req, res) {
-        console.log("gkgkgkg",req.file.filename)
         
         try{
             let existingUpload = await Upload.findOne({ userId: req.body.userId })
@@ -25,10 +24,8 @@ export default class UploadController {
     }
 
     async parseFile (req,res){
-        console.log("omething new",req.file)
         const existingPdfBytes = req.file.buffer;
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        console.log("something count" , pdfDoc.getPageCount())
         res.end(pdfDoc.getPageCount().toString());
     }
 
@@ -68,7 +65,6 @@ export default class UploadController {
     
             const result = await Upload.updateOne(filter, update);
     
-            console.log('Document updated:', result);
             res.send("success")
         } catch (error) {
             res.status(401).send("fail")

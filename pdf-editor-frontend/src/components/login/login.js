@@ -2,6 +2,7 @@ import { useState , useEffect } from "react";
 import styles from "./login.module.css";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import server from "../../config.js";
 
 const LoginComponent = () => {
 
@@ -17,6 +18,7 @@ const LoginComponent = () => {
     const [user, setUser] = useState(false);
 
     const [warning , setWarning] = useState(false);
+    const [loading , setLoading] = useState(true);
 
     const [warningMsg , setWarningMsg] = useState(false);
 
@@ -26,10 +28,24 @@ const LoginComponent = () => {
     //setting API value for login and register forms
     useEffect(() => {
         if (!isRegister) {
-            setUrl("http://localhost:3500/users/login")
+            setUrl(server+"users/login")
         } else {
-            setUrl("http://localhost:3500/users/register")
+            setUrl(server+"users/register")
         }
+
+        async function checkBackendOnline(){
+            try{
+                let response = await axios.get(server);
+            if(response.status===200){
+                setLoading(false);
+            }
+            }catch(err){
+                console.log(err)
+            }
+            
+        }
+
+        checkBackendOnline()
     }, [isRegister])
 
     //handling form submit
@@ -41,7 +57,6 @@ const LoginComponent = () => {
             password: password,
             name: name
         }
-        console.log("something good",formData)
 
         try {
             const response = await axios.post(
@@ -51,9 +66,9 @@ const LoginComponent = () => {
 
             //setting token and user data on successfull sign in
             if (response.status === 200) {
-                if (!isRegister) {
+               
                     localStorage.setItem("token", response.data)
-                }
+                
                 setUser(true);
             }
 
@@ -77,7 +92,9 @@ const LoginComponent = () => {
     return (
         <div className={`margin ${styles.margin}`}>
             {user && <Navigate to={'/'} replace={true}></Navigate>}
-            <div className={`body-wrapper column`}>
+            {
+                loading ? <h1>Waiting for backend to come online.</h1> :
+                <div className={`body-wrapper column`}>
                 <div className={`${styles.wrapper}`}>
                     <div className="body-wrapper justify-between" style={{ marginBottom: "10px" }}>
                         <p className={styles.heading}>{isRegister ? "Register" : "Login"}</p>
@@ -112,6 +129,8 @@ const LoginComponent = () => {
               
                 <br></br>
             </div>
+            }
+           
         </div>
     )
 }

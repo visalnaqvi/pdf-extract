@@ -6,7 +6,7 @@ import server from "../config";
 export const validateSession = async (setUser) => {
     try {
         const response = await axios.get(
-            server+"validate"
+            server+"users/validate"
         );
        
             if (response.status === 401) {

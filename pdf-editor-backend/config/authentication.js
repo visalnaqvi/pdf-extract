@@ -6,7 +6,6 @@ export default class Authentication{
 
     //function to genrate jwt token
      static generateToken(user){
-        console.log("gggggggggggggggg",user)
         const token = jwt.sign({
             userId:user.userId,
             role:user.role,

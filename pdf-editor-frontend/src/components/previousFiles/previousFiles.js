@@ -3,12 +3,12 @@ import axios from "axios"
 import styles from "./previousFiles.module.css"
 import { Link } from "react-router-dom"
 import { validateSession } from "../../services/auth"
-import Home from "../home/home"
+import server from "../../config.js"
+
 const PreviousFiles = () => {
     const [user, setUser] = useState({});
     const token = localStorage.getItem("token");
     const [data, setData] = useState({})
-    const [file, setFile] = useState("");
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -20,11 +20,11 @@ const PreviousFiles = () => {
         async function fetchData() {
             if (user.userId) {
                 try{
-                    let response = await axios.post("http://localhost:3500/upload/user-data", user);
+                    let response = await axios.post(server+"upload/user-data", user);
                     if (response.status === 200) {
                         setData(response.data);
                     } else {
-                        console.log("erro")
+                        console.log("error")
                     }
                 }catch(err){
                     console.log(err)
@@ -40,7 +40,7 @@ const PreviousFiles = () => {
     const deleteFile = async (index) => {
         let newFiles = data.files.filter((f, i) => { return i != index })
         try{
-            let response = await axios.post("http://localhost:3500/upload/delete-file",{userId:user.userId , files:newFiles})
+            let response = await axios.post(server+"upload/delete-file",{userId:user.userId , files:newFiles})
             if(response.status===200){
                 console.log("success")
             }
@@ -51,9 +51,6 @@ const PreviousFiles = () => {
        
     }
 
-    useEffect(() => {
-        console.log('fileeeeee', file);
-    }, [file])
     return (
         <div>
             {user.userId ?
@@ -62,12 +59,17 @@ const PreviousFiles = () => {
 
                     {
                         data.files && data.files.map((file, i) => (
-                            <div key={i} className={styles.card}>
-                                <p className={styles.heading}>{file}</p>
-                                <a href={`http://localhost:3500/files/${file}`} download={"downloaded_file.pdf"}>
-                                    <button className={styles.download}>Download PDF</button>
-                                </a>                    
-                                <button className={styles.download} onClick={() => { deleteFile(i) }}>Delete</button>
+                            <div key={i}>
+                                {
+                                    file &&  <div className={styles.card}>
+                                    <p className={styles.heading}>{file}</p>
+                                    <a href={server+`files/${file}`} download={"downloaded_file.pdf"}>
+                                        <button className={styles.download}>Download PDF</button>
+                                    </a>                    
+                                    <button className={styles.download} onClick={() => { deleteFile(i) }}>Delete</button>
+                                </div>
+                                }
+                           
                             </div>
                         ))
                     }
